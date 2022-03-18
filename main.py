@@ -1,16 +1,17 @@
 import base64
 from io import BytesIO
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI
 from Model.model import predict
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+import os
+from urllib.request import urlretrieve
 from PIL import Image
 import torch
 
 
 class image_base64(BaseModel):
     img_base64: str
-    img_file: UploadFile = File(...)
 
 app = FastAPI()
 
@@ -32,23 +33,17 @@ def basetoimage(base):
         return None, 0
 
 @app.post("/")
-async def read_image(image: UploadFile = File(...)):
-    # #download model file
-    # if os.path.exists('Model/model_398_trace.pt') == False:
-    #     url = 'https://onedrive.live.com/download?cid=470A5A8DB59AAEA1&resid=470A5A8DB59AAEA1%2114267&authkey=AMbqal_UGof27TE'
-    #     filename = 'Model/model_398_trace.pt'
-    #     urlretrieve(url, filename)
+async def read_image(file: image_base64):
+    #download model file
+    if os.path.exists('Model/snake_jit.pt') == False:
+        url = 'https://onedrive.live.com/download?cid=470A5A8DB59AAEA1&resid=470A5A8DB59AAEA1%2115989&authkey=AJ3CFbpMUgJXe04'
+        filename = 'Model/snake_jit.pt'
+        urlretrieve(url, filename)
+
+    base64 = file.img_base64
     model = torch.jit.load("Model/snake_jit.pt")
     flag = 0
-    base64 = "string"
-
-    if image!=None:
-        image = image.file
-        image = Image.open(image)
-        flag = 1
-
-    if base64 != "string":
-        image, flag = basetoimage(base64)
+    image, flag = basetoimage(base64)
 
     if flag == 1:
         result = predict(model, image)
