@@ -39,11 +39,7 @@ async def read_image(file: image_base64):
         url = 'https://onedrive.live.com/download?cid=470A5A8DB59AAEA1&resid=470A5A8DB59AAEA1%2115989&authkey=AJ3CFbpMUgJXe04'
         filename = 'Model/snake_jit.pt'
         urlretrieve(url, filename)
-    try:
-        if model:
-            model.eval()
-    except:
-        model = torch.jit.load("Model/snake_jit.pt")
+    model = torch.jit.load("Model/snake_jit.pt")
 
     base64 = file.img_base64
     image, flag = basetoimage(base64)
