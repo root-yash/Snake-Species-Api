@@ -2,7 +2,7 @@ import pymongo
 from pymongo.server_api import ServerApi
 
 def fetch(index):
-    loc = "mongodb+srv://root-yash:<password>@snakedataset.pheez.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+    loc = "mongodb+srv://root-yash:J6mQZrPOietkgtpt@snakedataset.pheez.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
     client = pymongo.MongoClient(
         loc,
         server_api=ServerApi('1')
