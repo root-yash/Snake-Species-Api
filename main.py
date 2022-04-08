@@ -8,6 +8,7 @@ import os
 from urllib.request import urlretrieve
 from PIL import Image
 import torch
+from DataBase.DataFetch import fetch
 
 
 class image_base64(BaseModel):
@@ -43,9 +44,10 @@ async def read_image(file: image_base64):
 
     base64 = file.img_base64
     image, flag = basetoimage(base64)
-
+    result = {"Result": "1"}
     if flag == 1:
-        result = predict(model, image)
+        idx = predict(model, image)
+        result.update(fetch(idx))
     else:
         result = {"Result": "Please Provide Correct Input"}
 
