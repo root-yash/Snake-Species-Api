@@ -10,6 +10,6 @@ def predict(model, image):
     modified_image = transformer(image)
     with torch.no_grad():
         result = model(torch.unsqueeze(modified_image, dim=0))
-    return {"result": str(int(result.argmax()))}
+    return str(int(result.argmax()))
 
 
